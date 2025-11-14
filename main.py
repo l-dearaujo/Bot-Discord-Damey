@@ -74,13 +74,15 @@ async def on_member_remove(member):
 
 @bot.tree.command(name='help', description='Donne des indication sur le fonctionnement du bot.')
 async def test(interaction: discord.Interaction):
-    embed = discord.Embed(description=f"Bienvenu sur la commande Aide, vous trouverez ici toutes les commandes ainsi que leur fonctionnement et utilité.\n\n__Commandes Slash :__\n • **/add_role** : (Réservé au Staff) Ajouter un rôle à un membre.\n • **/ban** : (Réservé au Staff) Banni un membre.\n • **/delete_role** : (Réservé au Staff) Supprimer le rôle d'un membre.\n • **/dm** : (Réservé au Staff) Envoyer un message privé avec le bot à un membre du serveur.\n • **/facture** : (Si activée par l'administrateur) Créer une nouvelle facture.\n • **/kick** : (Réservé au Staff) Permet d'exclure un membre du serveur.\n • **/ping** : Permet de connaître le ping entre vous et le bot.\n • **/say** : (Réservé au Staff) Permet d'envoyer un message à l'aide du bot.\n • **/service_clear** : (Réservé au Staff) Permet de nettoyer le salon des PDS et FDS.\n • **/unban** : (Réservé au Staff) Permet de débannir un joueur\n\n__Commandes préfix :__\n • **{prefix}Help** : (Réservé au Staff) Permet de créer l'embed Aide dans le salon où est executé la commande\n • **{prefix}recrutement** : (Réservé au Staff) Permet de créer l'embed pour les recrutements\n • **{prefix}pds_fds** : (Réservé au Staff) Permet de créer l'embed pour les prises et fin de service\n • **{prefix}recrutement_on** : (Réservé au Staff) Permet de rendre possible le dépot de CV sur l'embed recrutement\n • **{prefix}recrutement_off** : (Réservé au Staff) Permet de ne plus rendre accessible le dépot de CV sur l'embed recrutement", color=main_color)
+    embed = discord.Embed(description=f"Bienvenu sur la commande Aide, vous trouverez ici toutes les commandes ainsi que leur fonctionnement et utilité.\n\n__Commandes Slash :__\n • **/add_role** : (Réservé au Staff) Ajouter un rôle à un membre.\n • **/ban** : (Réservé au Staff) Banni un membre.\n • **/delete_role** : (Réservé au Staff) Supprimer le rôle d'un membre.\n • **/dm** : (Réservé au Staff) Envoyer un message privé avec le bot à un membre du serveur.\n • **/facture** : (Si activée par l'administrateur) Créer une nouvelle facture.\n • **/kick** : (Réservé au Staff) Permet d'exclure un membre du serveur.\n • **/ping** : Permet de connaître le ping entre vous et le bot.\n • **/say** : (Réservé au Staff) Permet d'envoyer un message à l'aide du bot.\n • **/service_clear** : (Réservé au Staff) Permet de nettoyer le salon des PDS et FDS.\n • **/unban** : (Réservé au Staff) Permet de débannir un joueur\n\n__Commandes préfix :__\n • **{prefix}Help** : (Réservé au Staff) Permet de créer l'embed Aide dans le salon où est executé la commande\n • **{prefix}recrutement** : (Réservé au Staff) Permet de créer l'embed pour les recrutements\n • **{prefix}pds_fds** : (Réservé au Staff) Permet de créer l'embed pour les prises et fin de service\n • **{prefix}recrutement_on** : (Réservé au Staff) Permet de rendre possible le dépot de CV sur l'embed recrutement\n • **{prefix}recrutement_off** : (Réservé au Staff) Permet de ne plus rendre accessible le dépot de CV sur l'embed recrutement\n • **/info** : Renvoie toutes les informations du serveur", color=main_color)
     embed.set_author(name="Commande Aide", icon_url=url_logo_entreprise)
     embed.set_footer(text=bot.user.name)
     await interaction.response.send_message(embed=embed)
 
 
 # Commandes Slash Administration
+
+# Commande Add_Role -> Ajout d'un rôle à un membre en particulier
 
 @bot.tree.command(name='add_role', description='Ajouter un rôle à un membre.')
 @discord.app_commands.describe(member = "Pseudo du membre")
@@ -91,7 +93,9 @@ async def test(interaction: discord.Interaction, member: discord.Member, roles: 
             await member.add_roles(roles)
         await interaction.response.send_message(f"Rôle {roles} ajouté à __{member.name}__", ephemeral=True)
     else : 
-        await interaction.response.send_message(f"Vous n'avez pas les permissions nécessaires pour éxecuter cette commande.", ephemeral=True)
+        await interaction.response.send_message(f"Vous n'avez pas les permissions nécessaires pour exécuter cette commande.", ephemeral=True)
+
+# Commande delete_role -> Suppression d'un rôle à un membre spécifique
 
 @bot.tree.command(name='delete_role', description='Retirer un rôle à un membre.')
 @discord.app_commands.describe(member = "Pseudo du membre")
@@ -102,15 +106,19 @@ async def test(interaction: discord.Interaction, member: discord.Member, roles: 
             await member.remove_roles(roles)
         await interaction.response.send_message(f"Rôle {roles} retiré à __{member.name}__", ephemeral=True)
     else : 
-        await interaction.response.send_message(f"Vous n'avez pas les permissions nécessaires pour éxecuter cette commande.", ephemeral=True)
+        await interaction.response.send_message(f"Vous n'avez pas les permissions nécessaires pour exécuter cette commande.", ephemeral=True)
 
 # Commandes Slash Utilitaires
+
+# Commande ping -> Permet de connaître le temps de réaction du bot
 
 @bot.tree.command(name='ping', description="Calculer le temps de réponse du bot.", guild=None, )
 async def ping(interaction: discord.Interaction):
     bot_latency = bot.latency * 1000
     embed = discord.Embed(description=f"✅ Le ping est de **{bot_latency:.1f}**ms", color=main_color)
     await interaction.response.send_message(embed=embed, ephemeral=True)
+
+# Commande Service_clear -> Permet d'effacer le salon des PDS / FDS
 
 @bot.tree.command(name='service_clear', description="Effacer le salon des PDS / FDS.")
 async def effacer(interaction: discord.Interaction):
@@ -139,9 +147,11 @@ async def effacer(interaction: discord.Interaction):
             else:
                 await interaction.response.send_message("Le salon spécifié n'a pas été trouvé.", ephemeral=True)
     else:
-        await interaction.response.send_message("Vous n'avez pas les permissions nécessaires pour éxecuter cette commande.", ephemeral=True)
+        await interaction.response.send_message("Vous n'avez pas les permissions nécessaires pour exécuter cette commande.", ephemeral=True)
 
 # Commandes Slash de modération
+
+# Commande Ban -> Permet de bannir un joueur
 
 @bot.tree.command(name='ban', description="Bannir un membre.")
 @discord.app_commands.describe(membre = "Pseudo du membre")
@@ -163,7 +173,9 @@ async def ping(interaction: discord.Interaction, membre: discord.Member, raison:
         except discord.Forbidden:
             await interaction.response.send_message("Je n'ai pas les permissions nécessaires pour bannir cet utilisateur.", ephemeral=True)
     else:
-        await interaction.response.send_message("Vous n'avez pas les permissions nécessaires pour éxecuter cette commande.", ephemeral=True)
+        await interaction.response.send_message("Vous n'avez pas les permissions nécessaires pour exécuter cette commande.", ephemeral=True)
+
+# Commande Kick -> Permet de kick un membre du serveur
 
 @bot.tree.command(name='kick', description="Kick un membre.")
 @discord.app_commands.describe(member = "Pseudo du membre")
@@ -185,9 +197,11 @@ async def kick(interaction: discord.Interaction, member: discord.Member, reason:
         except discord.Forbidden:
             await interaction.response.send_message("Je n'ai pas les permissions nécessaires pour kick cet utilisateur.", ephemeral=True)
     else:
-        await interaction.response.send_message(f"Vous n'avez pas les permissions nécessaires pour éxecuter cette commande.", ephemeral=True)
+        await interaction.response.send_message(f"Vous n'avez pas les permissions nécessaires pour exécuter cette commande.", ephemeral=True)
 
-@bot.tree.command(name='unban', description='Débanir un membre.')
+# Commande Unban -> Permet de débannir un membre du serveur
+
+@bot.tree.command(name='unban', description='Débannir un membre.')
 @discord.app_commands.describe(user_id = "ID de l'utilisateur")
 async def unban(interaction: discord.Interaction, user_id: str):
     user = await bot.fetch_user(user_id)
@@ -201,10 +215,9 @@ async def unban(interaction: discord.Interaction, user_id: str):
         except discord.Forbidden:
             await interaction.response.send_message("Le bot n'a pas les permissions nécessaires pour débannir cet utilisateur.")
     else:
-        await interaction.response.send_message("Vous n'avez pas les permissions nécessaires pour éxecuter cette commande.", ephemeral=True)
+        await interaction.response.send_message("Vous n'avez pas les permissions nécessaires pour exécuter cette commande.", ephemeral=True)
 
-
-# Commande Slash statut service
+# Commande Slash statut service -> Permet de renvoyer le nombre de personnes en service
         
 @bot.tree.command(name="service", description="Effectif en service.")
 async def service(interaction: discord.Interaction):
@@ -216,7 +229,7 @@ async def service(interaction: discord.Interaction):
         await interaction.response.send_message("Le rôle 'En Service' n'a pas été trouvé sur ce serveur.", ephemeral=True)
     
 
-# Commandes Slash Factures
+# Commandes Slash Factures -> Permet de créer et enregistrer une facture dans le système
 
 @bot.tree.command(name="facture", description="Enregistrer une facture.")
 @discord.app_commands.describe(facturation = "Prix de la facture.")
@@ -232,7 +245,7 @@ async def service(interaction: discord.Interaction, facturation: str, photo_url:
         await channel.send(embed=embed)
         await interaction.response.send_message("Votre facture a bien été prise en compte !", ephemeral=True)
 
-# Commande discussion DM
+# Commande discussion DM -> Permet aux admins de DM une personne avec le bot
 
 @bot.tree.command(name="dm", description="DM une personne.")
 @discord.app_commands.describe(user = "Utilisateur à DM.")
@@ -247,9 +260,9 @@ async def service(interaction: discord.Interaction, user: discord.Member, messag
             await user.send("**(Staff " + interaction.user.name + ") :** " + message)
         await interaction.response.send_message("Votre message a bien été envoyé !", ephemeral=True)
     else:
-        await interaction.response.send_message(f"Vous n'avez pas les permissions nécessaires pour éxecuter cette commande.", ephemeral=True)
+        await interaction.response.send_message(f"Vous n'avez pas les permissions nécessaires pour exécuter cette commande.", ephemeral=True)
  
-# Commande SAY
+# Commande SAY -> Permet aux admins d'envoyer un message sur le serveur sous le nom du bot
 
 @bot.tree.command(name="say", description="Envoyer un message sur un salon spécifique.")
 @discord.app_commands.describe(channel = "Salon où envoyer le message.")
@@ -265,9 +278,9 @@ async def say(interaction: discord.Interaction, channel: discord.TextChannel, co
         else:
             await interaction.response.send_message("Vous devez être un membre du staff pour accéder à cette commande.")
     else:
-        await interaction.response.send_message(f"Vous n'avez pas les permissions nécessaires pour éxecuter cette commande.", ephemeral=True)
+        await interaction.response.send_message(f"Vous n'avez pas les permissions nécessaires pour exécuter cette commande.", ephemeral=True)
 
-# Système de Tickets - Recrutement
+# Système de Tickets - Recrutement -> Système de tickets pour les recrutements
 
 class Tickets_rec(discord.ui.View):
     def __init__(self):
@@ -308,7 +321,7 @@ class RecrutementForm(discord.ui.Modal, title="Recrutement - Informations"):
         await asyncio.sleep(2)
         embed = discord.Embed(title=f"Informations de : {interaction.user.name}", color=0x3366ff)
         embed.add_field(name="・Nom - Prénom RP", value=f"`{self.rm_name.value}`", inline=False)
-        embed.add_field(name="・Age IRL", value=f"`{self.rm_age.value}`", inline=False)
+        embed.add_field(name="・Âge IRL", value=f"`{self.rm_age.value}`", inline=False)
         embed.add_field(name="・Motivations", value=f"`{self.rm_motivations.value}`", inline=False)
         await channel.send(f"Merci {interaction.user.mention} pour ton intérêt à notre société, un membre du {role.mention} va te répondre dans quelque instants.", embed=embed, view=Tickets_close())
 
@@ -320,7 +333,7 @@ async def recrutement(ctx):
         embed = discord.Embed(title=f"{entreprise_name} - Recrutements", description=f"Pour avoir une chance de rejoindre notre société, il faut respecter quelques critères importants :\n\n> • Être sérieux et responsable.\n> • Être disponible assez souvent dans la semaine. (Disponibilité à notifier dans la candidature)\n> • Être à l'écoute des ordres et ne pas manquez de respect à la hiérarchie.\n> • Être respectueux envers les civils.\n> • Être titulaire du code ainsi que du permis de voiture.\n> • Être calme attentif et à l'écoute\n> • Avoir un langage correct\n\nSi vous respectez tous ces critères et que vous souhaitez nous rejoindre, cliquez sur le bouton pour confirmer votre candidature. __*Vous devrez remplir un formulaire après avoir cliqué sur le bouton.*__", color=main_color)
         embed.set_footer(text=f"L'équipe du {entreprise_name}.")
         embed.set_image(url=url_image_entreprise)
-        embed.add_field(name="État des recrutuments", value="🔴 Actuellements fermés.", inline=False)
+        embed.add_field(name="État des recrutements", value="🔴 Actuellements fermés.", inline=False)
         await ctx.send(embed=embed, view=Tickets_rec())
 
 @bot.command()
@@ -332,7 +345,7 @@ async def recrutement_on(ctx, id: int):
         embed = discord.Embed(title=f"{entreprise_name} - Recrutements", description=f"Pour avoir une chance de rejoindre notre société, il faut respecter quelques critères importants :\n\n> • Être sérieux et responsable.\n> • Être disponible assez souvent dans la semaine. (Disponibilité à notifier dans la candidature)\n> • Être à l'écoute des ordres et ne pas manquez de respect à la hiérarchie.\n> • Être respectueux envers les civils.\n> • Être titulaire du code ainsi que du permis de voiture.\n> • Être calme attentif et à l'écoute\n> • Avoir un langage correct\n\nSi vous respectez tous ces critères et que vous souhaitez nous rejoindre, cliquez sur le bouton pour confirmer votre candidature. __*Vous devrez remplir un formulaire après avoir cliqué sur le bouton.*__", color=main_color)
         embed.set_footer(text=f"L'équipe du {entreprise_name}.")
         embed.set_image(url=url_image_entreprise)
-        embed.add_field(name="État des recrutuments", value="🟢 Actuellements ouverts.", inline=False)
+        embed.add_field(name="État des recrutements", value="🟢 Actuellements ouverts.", inline=False)
         await message_to_edit.edit(embed=embed, view=Tickets_rec())
 
 @bot.command()
@@ -344,10 +357,10 @@ async def recrutement_off(ctx, id: int):
         embed = discord.Embed(title=f"{entreprise_name} - Recrutements", description=f"Pour avoir une chance de rejoindre notre société, il faut respecter quelques critères importants :\n\n> • Être sérieux et responsable.\n> • Être disponible assez souvent dans la semaine. (Disponibilité à notifier dans la candidature)\n> • Être à l'écoute des ordres et ne pas manquez de respect à la hiérarchie.\n> • Être respectueux envers les civils.\n> • Être titulaire du code ainsi que du permis de voiture.\n> • Être calme attentif et à l'écoute\n> • Avoir un langage correct\n\nSi vous respectez tous ces critères et que vous souhaitez nous rejoindre, cliquez sur le bouton pour confirmer votre candidature. __*Vous devrez remplir un formulaire après avoir cliqué sur le bouton.*__", color=main_color)
         embed.set_footer(text=f"L'équipe du {entreprise_name}.")
         embed.set_image(url=url_image_entreprise)
-        embed.add_field(name="État des recrutuments", value="🔴 Actuellements fermés.", inline=False)
+        embed.add_field(name="État des recrutements", value="🔴 Actuellements fermés.", inline=False)
         await message_to_edit.edit(embed=embed, view=None)
 
-# Système de Tickets - Aide
+# Système de Tickets - Aide -> Système de tickets pour demander de l'aide
 
 class Aide(discord.ui.View):
     def __init__(self):
@@ -372,7 +385,7 @@ async def Help(ctx):
         embed.set_image(url=url_image_entreprise)
         await ctx.send(embed=embed, view=Aide())
 
-# Système de Tickets - Fermeture des tickets
+# Système de Tickets - Fermeture des tickets -> Système de fermeture des tickets
 
 class Tickets_close(discord.ui.View):
     def __init__(self):
@@ -385,7 +398,7 @@ class Tickets_close(discord.ui.View):
         await asyncio.sleep(5)
         await channel.delete()
 
-# Système de boutons - PDS / FDS
+# Système de boutons - PDS / FDS -> Système de prise de service et de fin de service efficace
 
 class PDS_FDS(discord.ui.View):
   def __init__(self):
@@ -415,7 +428,7 @@ class PDS_FDS(discord.ui.View):
                 else:
                     description = "_Personne n'est en service ... :(_"
                 embed = discord.Embed(
-                    title='🔎 Utilisateurs en service (0) :', 
+                    title='🔎 Joueurs en service (0) :', 
                     description=description, 
                     color=main_color, 
                     timestamp=current_time)
@@ -480,12 +493,58 @@ async def pds_fds(ctx):
     if ctx.author.guild_permissions.administrator :
         tz = pytz.timezone('Europe/Paris')
         current_time = datetime.now(tz)
-        embed = discord.Embed(title='🔎 Utilisateurs en service (0) :', description=f"_Personne n'est en service ... :(_", color=main_color, timestamp=current_time)
+        embed = discord.Embed(title='🔎 Joueurs en service (0) :', description=f"_Personne n'est en service ... :(_", color=main_color, timestamp=current_time)
         embed.set_footer(text=f'La Direction')
         embed.set_author(name=entreprise_name, icon_url=url_logo_entreprise)
         message = await ctx.send(embed = embed, view=PDS_FDS())
         bot.saved_message_pds_fds = message
         with open("savings.json", "w") as file:
             json.dump({"msg_pds_fds_id": message.id,"channel_pds_fds_id": ctx.channel.id}, file)
+
+# Commande Info -> Renvoie toutes les informations sur le serveur.
+
+@bot.tree.command(name="info", description="Renvoie les informations du serveur.")
+async def info(interaction: discord.Interaction):
+    channels_text, i, channels_voice, roles = f"Total : **{len(interaction.guild.text_channels)}**\n\n", 0, f"Total : **{len(interaction.guild.voice_channels)}**\n\n", f"Total : **{len(interaction.guild.roles)}**\n\n"
+    for channel in interaction.guild.text_channels:
+        channels_text += f"<#{channel.id}>\n"
+        i+=1
+        if i > 10:
+            channels_text += f'\n*Liste non-exhaustive*\n'
+            break
+    i = 0
+    for channel in interaction.guild.voice_channels:
+        channels_voice += f"<#{channel.id}>\n"
+        i+=1
+        if i > 10:
+            channels_voice += f'\n*Liste non-exhaustive*\n'
+            break
+    i = 0
+    for role in interaction.guild.roles:
+        roles += f"<@&{role.id}>\n"
+        i+=1
+        if i > 10:
+            roles += f'\n*Liste non-exhaustive*\n'
+            break
+    embed = discord.Embed(title='Informations du serveur', color=main_color, timestamp=datetime.now(pytz.timezone('Europe/Paris')))
+    embed.set_footer(text='Damey')
+    embed.set_author(name=interaction.guild.name, icon_url=interaction.guild.icon)
+    embed.add_field(name="Propriétaire", value=f"<@{interaction.guild.owner_id}>")
+    embed.add_field(name="Nombre de membres", value=f"{interaction.guild.member_count}")
+    embed.add_field(name="Niveau de boost", value=f"{interaction.guild.premium_tier}")
+    if interaction.guild.description:
+        embed.add_field(name="Description du serveur", value=interaction.guild.description, inline=False)
+    creation = interaction.guild.created_at
+    embed.add_field(name="Date de création", value=f"<t:{int(creation.timestamp())}:F>")
+    embed.add_field(name="Date d'ajout du bot", value=f"<t:{int(interaction.guild.get_member(bot.user.id).joined_at.timestamp())}:F>")
+    if 'COMMUNITY' in interaction.guild.features:
+        lang, lan = str(interaction.guild.preferred_locale), ""
+        for i in range(1,3):
+            lan = lang[-i] + lan
+        embed.add_field(name="Langue du serveur", value=f":flag_{lan.lower()}: - {lan.upper()}", inline=False)
+    embed.add_field(name="Rôles", value=roles)
+    embed.add_field(name="Salons textuels", value=channels_text)
+    embed.add_field(name="Salons vocaux", value=channels_voice)
+    await interaction.response.send_message(embed = embed)
 
 bot.run(BOT_TOKEN)

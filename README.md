@@ -44,6 +44,7 @@ Le préfix est ? et il est modifiable dès le début du code. Il est représent�
     - Commande ping -> /ping
     - Commande say -> /say
     - Commande de suppression des anciens service / nettoyage du salon PDS / FDS -> /service_clear
+    - Commande info qui renvoie les informations du serveur -> /info
 
 ### Commandes classiques (utilisé pour les embed avec boutons) : 
     - Commande de création de ticket aide -> [prefix]Help
